@@ -36,6 +36,7 @@ export function FoodCard({
           <FoodImage
             src={item.image}
             alt={item.name}
+            sizes="(max-width: 430px) 45vw, 190px"
             className="aspect-[4/3] w-full"
           />
           {badge && (
@@ -45,13 +46,14 @@ export function FoodCard({
           )}
         </div>
         <div className="p-3 pb-3.5">
-          <h3 className="line-clamp-1 text-[15px] font-bold leading-snug text-ink">
+          {/* Height reserves two lines so grid rows stay aligned whether a
+              name is one word or "Chicken Cheese Shawarma". The clamp allows a
+              third line so the longest names wrap instead of truncating at the
+              narrowest widths (≤320px); at 375px+ every name fits in two. */}
+          <h3 className="line-clamp-3 min-h-[2.75em] text-[15px] font-bold leading-snug text-ink">
             {item.name}
           </h3>
-          <p className="mt-0.5 line-clamp-1 text-[12.5px] text-muted">
-            {item.description}
-          </p>
-          <div className="mt-2.5 pr-11">
+          <div className="mt-1.5 pr-11">
             <PriceDisplay amount={item.price} />
           </div>
         </div>

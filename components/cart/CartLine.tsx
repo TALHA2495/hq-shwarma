@@ -25,6 +25,7 @@ export function CartLine({ item }: { item: CartItem }) {
       <FoodImage
         src={item.image}
         alt={item.name}
+        sizes="72px"
         className="size-[72px] shrink-0 rounded-[14px]"
       />
       <div className="flex min-w-0 flex-1 flex-col">

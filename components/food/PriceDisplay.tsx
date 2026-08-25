@@ -13,7 +13,9 @@ export function PriceDisplay({
   const sizes = {
     sm: "text-[15px]",
     md: "text-[17px]",
-    lg: "text-[26px]",
+    // 23px, deliberately a step below the 26px product <h1> so the name stays
+    // the loudest thing on the page and the price reads as its answer.
+    lg: "text-[23px]",
   }[size];
   return (
     <span

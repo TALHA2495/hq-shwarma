@@ -55,8 +55,17 @@
     0 24px 60px -20px rgba(23, 19, 15, 0.28);
   --shadow-brand: 0 8px 20px -8px rgba(226, 58, 46, 0.55);
 
+  /* Edge of the phone column on wide viewports. The hairline is white, not
+     black: the backdrop is charcoal, so a dark ring is invisible against it. */
+  --shadow-frame: 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 2px 6px rgba(0, 0, 0, 0.4), 0 30px 80px -26px rgba(0, 0, 0, 0.75);
+
   /* Easing */
   --ease-out-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* Header footprint: 58px bar + 1px bottom border. Anything that sticks
+     directly beneath the header offsets by this plus the top safe area. */
+  --header-h: 59px;
 }
 
 @layer base {
@@ -123,6 +132,40 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+@utility line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Sticks directly beneath the app header without a seam. Uses the shared
+   --header-h token plus the device's top inset, so the two stay joined on
+   notched screens where env(safe-area-inset-top) is non-zero. */
+@utility sticky-under-header {
+  position: sticky;
+  top: calc(var(--header-h) + env(safe-area-inset-top));
+  z-index: 40;
+}
+
+/* Bottom action bar: keeps the primary CTA clear of the iOS home indicator. */
+@utility action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/* Scroll affordance for horizontal scrollers: fades content into the right
+   edge so a clipped item reads as "more this way" rather than as a bug. */
+@utility fade-edge-r {
+  mask-image: linear-gradient(
+    to right,
+    #000 0,
+    #000 calc(100% - 28px),
+    transparent 100%
+  );
 }
 
 /* Respect reduced motion as a global backstop (components also

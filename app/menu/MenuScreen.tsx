@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { UtensilsCrossed } from "lucide-react";
 import { MENU, isCategorySlug, itemsByCategory } from "@/lib/menu-data";
-import { CategoryTabs, type TabValue } from "@/components/food/CategoryTabs";
+import { CategoryTabs, MENU_PANEL_ID, type TabValue } from "@/components/food/CategoryTabs";
 import { FoodGrid } from "@/components/food/FoodGrid";
 import { EmptyState } from "@/components/ui/EmptyState";
 
@@ -41,11 +41,16 @@ export function MenuScreen() {
         </p>
       </div>
 
-      <div className="sticky top-[58px] z-40 border-b border-line bg-bg/95 px-4 py-2.5 backdrop-blur-md">
+      <div className="sticky-under-header border-b border-line bg-bg/95 px-4 py-2.5 backdrop-blur-md">
         <CategoryTabs value={value} onChange={onChange} />
       </div>
 
-      <div className="px-4 py-5">
+      <div
+        id={MENU_PANEL_ID}
+        role="tabpanel"
+        aria-labelledby={`tab-${value}`}
+        className="px-4 py-5"
+      >
         {items.length > 0 ? (
           <FoodGrid items={items} motionKey={value} />
         ) : (

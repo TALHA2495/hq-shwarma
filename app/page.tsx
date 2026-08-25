@@ -90,7 +90,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="space-y-11 px-4 py-9">
+      <div className="space-y-11 px-4 pb-11 pt-9">
         {/* ── Popular right now ──────────────────────────── */}
         <section>
           <SectionHeader
@@ -122,6 +122,7 @@ export default function HomePage() {
                   <FoodImage
                     src={categoryImage(c.slug)}
                     alt={c.name}
+                    sizes="(max-width: 430px) 50vw, 215px"
                     className="absolute inset-0 size-full"
                     imgClassName="transition-transform duration-500 group-hover:scale-105"
                   />
@@ -213,30 +214,36 @@ export default function HomePage() {
           <SectionHeader eyebrow="Find us" title="Come by, or get it delivered" />
           <LocationCard />
         </section>
-
-        {/* ── Final CTA ──────────────────────────────────── */}
-        <section className="rounded-[22px] border border-line bg-surface-2 p-6 text-center shadow-card">
-          <h2 className="text-[22px] font-bold text-ink">Hungry yet?</h2>
-          <p className="mx-auto mt-1.5 max-w-[26ch] text-[13.5px] leading-relaxed text-ink-2">
-            Build your order and send it over on WhatsApp — we&apos;ll take it
-            from there.
-          </p>
-          <div className="mt-5 space-y-2.5">
-            <Button
-              href={heroWhatsApp}
-              variant="whatsapp"
-              size="lg"
-              fullWidth
-              leftIcon={<WhatsAppIcon className="size-5" />}
-            >
-              Order on WhatsApp
-            </Button>
-            <Button href="/menu" variant="secondary" size="lg" fullWidth>
-              View the full menu
-            </Button>
-          </div>
-        </section>
       </div>
+
+      {/* ── Closing CTA ────────────────────────────────────
+          Charcoal and full-bleed, running straight into the footer — a
+          deliberate rhythm break after the run of warm rounded cards. */}
+      <section className="bg-charcoal px-6 py-12 text-center text-white">
+        <h2 className="text-[24px] font-bold tracking-tight">Hungry yet?</h2>
+        <p className="mx-auto mt-2 max-w-[30ch] text-[13.5px] leading-relaxed text-white/65">
+          Build your order and send it over on WhatsApp — we&apos;ll take it
+          from there.
+        </p>
+        <div className="mx-auto mt-6 flex max-w-[300px] flex-col items-center gap-4">
+          <Button
+            href={heroWhatsApp}
+            variant="whatsapp"
+            size="lg"
+            fullWidth
+            leftIcon={<WhatsAppIcon className="size-5" />}
+          >
+            Order on WhatsApp
+          </Button>
+          <Link
+            href="/menu"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-white/80 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white hover:decoration-white/60"
+          >
+            View the full menu
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

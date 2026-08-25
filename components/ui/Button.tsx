@@ -6,7 +6,7 @@ import type {
 } from "react";
 import { cn } from "@/lib/cn";
 
-type Variant = "primary" | "secondary" | "text" | "whatsapp" | "foodpanda";
+type Variant = "primary" | "secondary" | "text" | "danger" | "whatsapp" | "foodpanda";
 type Size = "sm" | "md" | "lg";
 
 const VARIANTS: Record<Variant, string> = {
@@ -15,6 +15,7 @@ const VARIANTS: Record<Variant, string> = {
   secondary:
     "bg-surface text-ink border border-line-2 hover:border-ink/25 hover:bg-surface-2",
   text: "text-ink-2 hover:text-ink underline-offset-4 hover:underline",
+  danger: "bg-error text-white hover:brightness-[0.94] active:brightness-90",
   // Deliberate channel colours — used only for their own action, not decoration.
   whatsapp: "bg-[#1ea952] text-white shadow-[0_8px_20px_-8px_rgba(30,169,82,0.55)] hover:bg-[#178a43]",
   foodpanda:

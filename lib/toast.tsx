@@ -45,9 +45,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ toast }}>
       {children}
-      {/* Constrained to the mobile column width, sits above sticky CTAs. */}
+      {/* Constrained to the mobile column width, sits above sticky CTAs.
+          The persistent inner container is the live region so screen readers
+          announce each toast as it's inserted. */}
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex justify-center px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-        <div className="flex w-full max-w-[430px] flex-col items-center gap-2">
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="false"
+          className="flex w-full max-w-[430px] flex-col items-center gap-2"
+        >
           <AnimatePresence initial={false}>
             {toasts.map((t) => (
               <motion.div
@@ -58,7 +65,6 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 exit={reduce ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.98 }}
                 transition={{ duration: 0.22, ease: [0.22, 0.61, 0.36, 1] }}
                 className="pointer-events-auto flex items-center gap-2.5 rounded-full bg-charcoal/95 px-4 py-2.5 text-sm font-medium text-white shadow-pop backdrop-blur"
-                role="status"
               >
                 {t.icon && (
                   <span className="grid size-5 shrink-0 place-items-center text-accent">

@@ -4,18 +4,19 @@ import { useState } from "react";
 import { AnimatePresence } from "motion/react";
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
-import { buildCartMessage, whatsappUrl } from "@/lib/whatsapp";
+import { formatPrice } from "@/lib/format";
 import { BUSINESS } from "@/lib/config";
 import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { CartLine } from "@/components/cart/CartLine";
-import { OrderSummary } from "@/components/cart/OrderSummary";
+import { OrderDetailsSheet } from "@/components/cart/OrderDetailsSheet";
 import { WhatsAppIcon, FoodpandaIcon } from "@/components/brand/BrandIcons";
 
 export function CartScreen() {
   const { items, itemCount, subtotal, clearCart } = useCart();
-  const [sheetOpen, setSheetOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [confirmClear, setConfirmClear] = useState(false);
 
   if (items.length === 0) {
     return (
@@ -32,8 +33,6 @@ export function CartScreen() {
     );
   }
 
-  const waHref = whatsappUrl(buildCartMessage(items, subtotal));
-
   return (
     <div>
       <div className="px-4 py-5">
@@ -43,8 +42,8 @@ export function CartScreen() {
           </h1>
           <button
             type="button"
-            onClick={clearCart}
-            className="text-[13px] font-semibold text-muted transition-colors hover:text-error"
+            onClick={() => setConfirmClear(true)}
+            className="-mr-3 inline-flex h-11 items-center rounded-full px-3 text-[13px] font-semibold text-muted transition-colors hover:text-error"
           >
             Clear
           </button>
@@ -57,59 +56,81 @@ export function CartScreen() {
             ))}
           </AnimatePresence>
         </ul>
-
-        <div className="mt-5">
-          <OrderSummary subtotal={subtotal} itemCount={itemCount} />
-        </div>
       </div>
 
-      {/* Sticky checkout actions — WhatsApp leads, Foodpanda coexists. */}
-      <div className="sticky bottom-0 space-y-2.5 border-t border-line bg-bg/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-md">
+      {/* Sticky checkout actions. The total lives here so it's always visible —
+          it used to sit in the scroll area, hidden behind this bar on load. */}
+      <div className="action-bar space-y-2.5 border-t border-line bg-bg/95 px-4 pt-3 backdrop-blur-md">
+        <div className="flex items-baseline justify-between">
+          <span className="text-[13.5px] text-ink-2">
+            Total
+            <span className="text-muted">
+              {" "}
+              · {itemCount} {itemCount === 1 ? "item" : "items"}
+            </span>
+          </span>
+          <span className="font-display text-[22px] font-extrabold tracking-tight text-ink">
+            {formatPrice(subtotal)}
+          </span>
+        </div>
         <Button
           type="button"
           variant="whatsapp"
           size="lg"
           fullWidth
-          onClick={() => setSheetOpen(true)}
+          onClick={() => setDetailsOpen(true)}
           leftIcon={<WhatsAppIcon className="size-5" />}
         >
           Order on WhatsApp
         </Button>
+        {/* Foodpanda coexists but is the secondary path (spec §6). */}
         <Button
           href={BUSINESS.foodpandaUrl}
           variant="foodpanda"
-          size="lg"
+          size="md"
           fullWidth
-          leftIcon={<FoodpandaIcon className="size-5 text-[#e91e77]" />}
+          leftIcon={<FoodpandaIcon className="size-[18px] text-[#e91e77]" />}
         >
           Order via Foodpanda
         </Button>
+        <p className="pt-0.5 text-center text-[11.5px] leading-relaxed text-muted">
+          No payment here — the restaurant confirms your total on WhatsApp.
+        </p>
       </div>
 
+      <OrderDetailsSheet
+        open={detailsOpen}
+        onClose={() => setDetailsOpen(false)}
+        items={items}
+        subtotal={subtotal}
+      />
+
       <BottomSheet
-        open={sheetOpen}
-        onClose={() => setSheetOpen(false)}
-        title="Order on WhatsApp"
-        description="Your full order opens as a prefilled WhatsApp message. Nothing is charged here — the restaurant confirms details and total with you."
+        open={confirmClear}
+        onClose={() => setConfirmClear(false)}
+        title="Clear your order?"
+        description="This removes every item from your cart. You can’t undo it."
       >
         <div className="space-y-2.5">
           <Button
-            href={waHref}
-            variant="whatsapp"
+            type="button"
+            variant="danger"
             size="lg"
             fullWidth
-            leftIcon={<WhatsAppIcon className="size-5" />}
-            onClick={() => setSheetOpen(false)}
+            onClick={() => {
+              clearCart();
+              setConfirmClear(false);
+            }}
           >
-            Continue to WhatsApp
+            Clear order
           </Button>
           <Button
             type="button"
             variant="text"
             fullWidth
-            onClick={() => setSheetOpen(false)}
+            onClick={() => setConfirmClear(false)}
           >
-            Go back
+            Keep items
           </Button>
         </div>
       </BottomSheet>
