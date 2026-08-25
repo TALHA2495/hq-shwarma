@@ -20,7 +20,7 @@ const contactRow =
 export function Footer() {
   return (
     <footer className="bg-charcoal px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-9 text-white/80">
-      <Logo size="md" href={null} onDark />
+      <Logo size="md" onDark />
       <p className="mt-3 text-sm text-white/55">{BUSINESS.addressLine}</p>
 
       <nav

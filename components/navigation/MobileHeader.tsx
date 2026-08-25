@@ -35,7 +35,7 @@ export function MobileHeader() {
           <>
             <BackButton />
             {/* Truly centred regardless of side widths */}
-            <div className="pointer-events-none absolute left-1/2 -translate-x-1/2">
+            <div className="absolute left-1/2 -translate-x-1/2">
               <Logo size="sm" />
             </div>
           </>
